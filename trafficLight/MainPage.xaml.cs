@@ -1,40 +1,72 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+﻿
+using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Handlers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+
 namespace trafficLight
 {
     public partial class MainPage : ContentPage
     {
-        enum Status { Stop, Attention, Start}
-        private Status status = Status.Stop;
-        private PeriodicTimer _timer;
-        private CancellationTokenSource _cancellationTokenSource;
+        private int timer = 0;
+        private TrafficLight trafficLight = new TrafficLight();
+        private WalkerLight walkerLight = new WalkerLight();
+        private Color lightColor = Colors.Gray;
         public MainPage()
         {
             InitializeComponent();
             InitializeLights();
+            InitializeWalker();
             StartTrafficLightAsync();
+            
 
         }
-        public async void StartTrafficLightAsync() { 
-            UpdateLights();
-            await DelayUpdate();
+        private void InitializeWalker()
+        {
+
+            walker.Add(Light(Colors.Gray), 0, 0);
+            walker.Add(Light(Colors.Gray), 0, 1);
+
         }
-        private void InitializeLights() { 
-            
+
+        public async void StartTrafficLightAsync() {
+            while (true) { 
+                await TimerUpdate();
+                lightColor = trafficLight.UpdateLights(timer);
+                //для машины цвета
+                lightColor = walkerLight.UpdateLight(Math.Abs( timer-12));
+                //для пешехода цвета
+
+            }
         }
-        private void UpdateLights() {
-            Console.WriteLine("1");
+        private void InitializeLights() {
+
+            lights.Add(Light(Colors.Gray), 0, 0);
+            lights.Add(Light(Colors.Gray), 0, 1);
+            lights.Add(Light(Colors.Gray), 0, 2);
         }
-        private async Task DelayUpdate() {
-            await Task.Delay(10000);
+
+        public Ellipse Light(Color color)
+        {
+            var currentLight = new Ellipse();
+
+            currentLight.Fill = color;
+            currentLight.HeightRequest = 150;
+            currentLight.WidthRequest = 150;
+            return currentLight;
         }
-        private void BlinkGreen() { }
-        private void TransitionFromRed() { }
+
+        
+        private async Task TimerUpdate() {
+            await Task.Delay(1000);
+            timer += 1;
+            if (timer == 25)
+                timer = 0;
+        }
+        
 
        
     }
