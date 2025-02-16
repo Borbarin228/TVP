@@ -9,19 +9,19 @@ namespace trafficLight
     internal class WalkerLight
     {
         public enum Status { Green, Red, None}
-        public Status status = Status.None;
+        public Status status = Status.Green;
         public Color UpdateLight(int timer)
         {
             switch (timer)
             {
-                case 0:
-                    if (status == Status.Green)
+                case 10:
+                    if (status == Status.Green )
                     {
                         status = Status.Red;
                         return Colors.Red;
                     }
                     break;
-                case 12:
+                case 0:
                     if (status == Status.Red)
                     {
                         status = Status.Green;
@@ -29,6 +29,7 @@ namespace trafficLight
                     }
                     break;
             }
+
             return Colors.Gray;
         }
     }

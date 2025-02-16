@@ -13,8 +13,10 @@ namespace trafficLight
         public TrafficLight() { }
         public Color UpdateLights(int timer)
         {
+            
             switch (timer)
             {
+               
 
                 case 0:
                     if (status == Status.Off || status == Status.Yellow)
@@ -48,6 +50,7 @@ namespace trafficLight
                     
                     
             }
+
             return Colors.Gray;
         }
     }
